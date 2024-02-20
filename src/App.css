@@ -3,9 +3,9 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 20vmin;
   pointer-events: none;
-
+  margin-right: 20px;
 }
 
 .logo-name {
@@ -84,6 +84,7 @@ input[type=text]::placeholder {
 
 .search-wrapper {
   width: 100vw;
+  margin-top: 38px;
 }
 
 .search-input {
@@ -100,4 +101,8 @@ input[type=text]::placeholder {
   padding: 0 45px;
   font-size: 1rem;
   font-weight: 700;
+  cursor: pointer;
+}
+.button:hover {
+  offset: 0 5px;
 }
