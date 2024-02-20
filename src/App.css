@@ -15,8 +15,7 @@
 }
 
 .App-header {
-  
-  min-height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,6 +103,7 @@ input[type=text]::placeholder {
   font-weight: 700;
   cursor: pointer;
 }
+
 .button:hover {
   offset: 0 5px;
 }
@@ -112,23 +112,30 @@ input[type=text]::placeholder {
   display: grid;
   grid-template-columns: repeat(3, 400px [col-start]);
   column-gap: 30px;
-  
+  row-gap: 20px;
 }
 
 .result-item {
   list-style: none;
   text-transform: capitalize;
+  
 } 
 
 .result-image {
-  align-items: flex-start;
   overflow: hidden;
   aspect-ratio: 16/9;
   border-radius: 20px;
 }
 .result-image img {
+  max-width: 400px;
   flex-shrink: 0;
   min-width: 100%;
   min-height: 100%;
-  
+}
+.reult-label {
+  width: 100%;
+  text-align: left;
+  padding-left: 15px;
+  font-size: 24px;
+  line-height: 29px;
 }

@@ -53,3 +53,5 @@ export const getRandomDogs = async (amount: number): Promise<RandomDogsResponse>
   }
 };
 
+
+

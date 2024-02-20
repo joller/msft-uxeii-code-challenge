@@ -27,6 +27,9 @@ function App() {
     console.log(results)
   }, [])
 
+  /// TODO search code
+
+
   return (
     <div className="App">
     <header className="App-header">
@@ -35,22 +38,29 @@ function App() {
         <p className="logo-name">Woofer</p>  
       </div>
      
-      <Search />
+      {/* <Search /> */}
       { /* <p className="small">
         An Innovation & Technology team challenge
       </p> */ }
+       <div className="flex items-center justify-center search-wrapper">
+            <label className="sr-only" htmlFor="search">Search</label>
+            <input id="searchInput" className="search-input" placeholder="Search" type="text" />
+            <button className="button">Search</button>
+        </div>
     </header>
     <div className="results">
       <ul className="results-list">
+
         {
         results.map((result: RandomDog, i) => (
         <li className="result-item" key={i}> 
-          <div className="flex justify-center result-image">
+          <div className="flex justify-center items-center result-image">
             <img  src={result.img} /> 
           </div>
-          <p>{result.label}</p>
+          <p className="reult-label">{result.label}</p>
         </li>
         ))}
+
       </ul>
     </div>
   </div>
