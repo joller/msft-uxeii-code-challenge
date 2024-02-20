@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #FFF8F2;
 }
 
 .App-logo {
@@ -14,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #FFF8F2;
+  
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -105,4 +106,29 @@ input[type=text]::placeholder {
 }
 .button:hover {
   offset: 0 5px;
+}
+
+.results-list {
+  display: grid;
+  grid-template-columns: repeat(3, 400px [col-start]);
+  column-gap: 30px;
+  
+}
+
+.result-item {
+  list-style: none;
+  text-transform: capitalize;
+} 
+
+.result-image {
+  align-items: flex-start;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  border-radius: 20px;
+}
+.result-image img {
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+  
 }

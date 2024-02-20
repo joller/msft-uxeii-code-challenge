@@ -40,11 +40,16 @@ function App() {
         An Innovation & Technology team challenge
       </p> */ }
     </header>
-    <div className='results'>
-      <ul>
+    <div className="results">
+      <ul className="results-list">
         {
         results.map((result: RandomDog, i) => (
-        <li key={i}><img src={result.img} /><p>{result.label}</p></li>
+        <li className="result-item" key={i}> 
+          <div className="flex justify-center result-image">
+            <img  src={result.img} /> 
+          </div>
+          <p>{result.label}</p>
+        </li>
         ))}
       </ul>
     </div>
