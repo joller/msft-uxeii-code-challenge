@@ -1,13 +1,19 @@
+/* Libs */
 import { useEffect, useState } from "react";
 
+/* Styles */
 import "./App.css";
-import type { EnhancedDog } from "./services/getDogs";
+
+/* Services & Types */
 import {
   getAllDogs,
-  getRandomDogs,
-  getDogsByBreed,
-  getDogsBySubBreed,
+  getRandomDogImages,
+  getDogImagesByBreed,
+  getDogImagesBySubBreed,
+  type EnhancedDog,
 } from "./services/getDogs";
+
+/* Utilities */
 import { parseUrlByBreed } from "./utilities/parseUrlByBreed";
 import { findSearchMatch } from "./utilities/findSearchMatch";
 import { processBreedData } from "./utilities/processBreedData";
@@ -26,7 +32,7 @@ function App() {
   const enhancedDogsArr = [];
 
   useEffect(() => {
-    getRandomDogs(12).then((data) => {
+    getRandomDogImages(12).then((data) => {
       const imageData = data.message;
 
       // sets the initial results display
@@ -41,14 +47,14 @@ function App() {
     getAllDogs().then((data) => {
       const dogResult = data.message;
 
-      const processedDogData = processBreedData(dogResult);
+      const processedDogData: EnhancedDog[] = processBreedData(dogResult);
 
       processedDogData.map((dog) => {
         const breed = dog.breed;
         const subBreed = dog.subBreed;
         // If it's a subBreed, hit the subBreed api to populate images
         if (dog.isSubBreed === true) {
-          getDogsBySubBreed(breed, subBreed).then((data) => {
+          getDogImagesBySubBreed(breed, subBreed).then((data) => {
             const imageData = data.message;
 
             const enhancedBreedObj = {
@@ -60,7 +66,7 @@ function App() {
           });
           // ... otherwise just ping breed
         } else {
-          getDogsByBreed(breed).then((data) => {
+          getDogImagesByBreed(breed).then((data) => {
             const imageData = data.message;
 
             const enhancedBreedObj = {
@@ -78,7 +84,7 @@ function App() {
     });
   }, []);
 
-  console.log(searchableData);
+  //console.log(searchableData);
 
   /// TODO handle an empty input submission?
   const submitSearch = (e: any) => {
@@ -100,9 +106,9 @@ function App() {
 
     const searchMatchResult = findSearchMatch(searchTerm, searchableData);
 
-    console.log(searchMatchResult);
+    // console.log(searchMatchResult);
 
-    searchTerm.length !== 0 && searchMatchResult.length === 0
+    searchMatchResult.length === 0
       ? setNoResults(true)
       : setResults(searchMatchResult);
   };

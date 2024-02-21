@@ -1,20 +1,10 @@
-export const getAllDogs = async () => {
-  const url = "https://dog.ceo/api/breeds/list/all";
+// TODO fix this type
+interface AllDogsResponse {
+  message: any;
+  status: string;
+}
 
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch data:", error);
-  }
-};
-
-interface RandomDogsResponse {
+interface DogsImageResponse {
   message: string[];
   status: string;
 }
@@ -32,9 +22,25 @@ export type EnhancedDog = {
   isSubBreed?: boolean;
 };
 
-export const getRandomDogs = async (
+export const getAllDogs = async (): Promise<AllDogsResponse> => {
+  const url = "https://dog.ceo/api/breeds/list/all";
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+  }
+};
+
+export const getRandomDogImages = async (
   amount: number
-): Promise<RandomDogsResponse> => {
+): Promise<DogsImageResponse> => {
   // Base URL of the API you are calling
   const url = `https://dog.ceo/api/breeds/image/random/${amount}`;
 
@@ -56,7 +62,9 @@ export const getRandomDogs = async (
   }
 };
 
-export const getDogsByBreed = async (breed: string) => {
+export const getDogImagesByBreed = async (
+  breed: string
+): Promise<DogsImageResponse> => {
   const url = `https://dog.ceo/api/breed/${breed}/images/random`;
 
   try {
@@ -72,7 +80,10 @@ export const getDogsByBreed = async (breed: string) => {
   }
 };
 
-export const getDogsBySubBreed = async (breed: string, subBreed: string) => {
+export const getDogImagesBySubBreed = async (
+  breed: string,
+  subBreed: string
+): Promise<DogsImageResponse> => {
   const url = `https://dog.ceo/api/breed/${breed}/${subBreed}/images/random`;
 
   try {
