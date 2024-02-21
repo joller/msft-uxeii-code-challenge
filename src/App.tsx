@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 
 import "./App.css";
-import type { RandomDog } from "./services/getDogs";
-import { getAllDogs, getRandomDogs, getDogsByBreed } from "./services/getDogs";
+import type { EnhancedDog } from "./services/getDogs";
+import {
+  getAllDogs,
+  getRandomDogs,
+  getDogsByBreed,
+  getDogsBySubBreed,
+} from "./services/getDogs";
 import { parseUrlByBreed } from "./utilities/parseUrlByBreed";
 import { findSearchMatch } from "./utilities/findSearchMatch";
-import { flattenObjectArrays } from "./utilities/flattenObjectArray";
+import { processBreedData } from "./utilities/processBreedData";
 
 function App() {
   // The results displayed to the user, whether it be initial or from the search
@@ -17,14 +22,8 @@ function App() {
   // To have a mechanism that enables the noResults state
   const [noResults, setNoResults] = useState(false);
 
-  //TODO
-  // create search data that gives us all dog possibilities
-  // filter/find using searchTerm to map through that search data, and return only the matches
-  // setResults to the matched search data
-
-  // TODO have this populate the URL when searchQuery is populated? Could be the "nice to have"
-  // Will need to encode the url param
-  // const [searchQuery, setSearchQuery] = useState('')
+  // Setting empty array that adds in image urls
+  const enhancedDogsArr = [];
 
   useEffect(() => {
     getRandomDogs(12).then((data) => {
@@ -33,41 +32,59 @@ function App() {
       // sets the initial results display
       const initialDisplayResults = imageData.map((imageData: string) => {
         const labelResult = parseUrlByBreed(imageData, "breeds/");
-        return { img: imageData, label: labelResult };
+        return { img: imageData, breed: labelResult };
       });
       setResults(initialDisplayResults);
     });
 
+    // Takes dog response from allDogs API and processes to an "enhanced" array that differentiates between breed/subBreed
     getAllDogs().then((data) => {
       const dogResult = data.message;
 
-      const breedData = Object.keys(dogResult);
-      const subBreedData = flattenObjectArrays(dogResult);
+      const processedDogData = processBreedData(dogResult);
 
-      const adjustedSubBreedData = subBreedData.map((item) => {
-        return { label: item, isSubBreed: true };
+      processedDogData.map((dog) => {
+        const breed = dog.breed;
+        const subBreed = dog.subBreed;
+        // If it's a subBreed, hit the subBreed api to populate images
+        if (dog.isSubBreed === true) {
+          getDogsBySubBreed(breed, subBreed).then((data) => {
+            const imageData = data.message;
+
+            const enhancedBreedObj = {
+              ...dog,
+              img: imageData,
+            };
+
+            enhancedDogsArr.push(enhancedBreedObj);
+          });
+          // ... otherwise just ping breed
+        } else {
+          getDogsByBreed(breed).then((data) => {
+            const imageData = data.message;
+
+            const enhancedBreedObj = {
+              ...dog,
+              img: imageData,
+            };
+
+            enhancedDogsArr.push(enhancedBreedObj);
+          });
+        }
       });
 
-      const adjustedBreedData = breedData.map((item) => {
-        return { label: item, isSubBreed: false };
-      });
-
-      const flattenedDogData = adjustedBreedData.concat(adjustedSubBreedData);
-
-      setSearchableData(flattenedDogData);
+      // Populate the searchable data set
+      setSearchableData(enhancedDogsArr);
     });
   }, []);
 
   console.log(searchableData);
 
-  /// TODO search code
+  /// TODO handle an empty input submission?
   const submitSearch = (e: any) => {
     // Prevents browser from reloading the page
     e.preventDefault();
     setNoResults(false);
-
-    // Setting empty array that takes in image urls during loop and resets each time form is submitted
-    const matchedResultsArr = [];
 
     // Read the form data
     const form = e.target;
@@ -85,30 +102,9 @@ function App() {
 
     console.log(searchMatchResult);
 
-    searchMatchResult.length === 0
+    searchTerm.length !== 0 && searchMatchResult.length === 0
       ? setNoResults(true)
-      : searchMatchResult.map((breed) => {
-          getDogsByBreed(breed).then((data) => {
-            // Getting image data
-            const imageData = data.message;
-            // creating an object that has imgData and label
-            const enhancedBreedObj = {
-              img: imageData,
-              label: breed.toString(),
-            };
-
-            // Adding urls to array
-            matchedResultsArr.push(enhancedBreedObj);
-
-            console.log(results);
-
-            // if temporary array is great or equal to our search results terms then set results
-            if (matchedResultsArr.length >= searchMatchResult.length) {
-              setResults(matchedResultsArr);
-              console.log(matchedResultsArr);
-            }
-          });
-        });
+      : setResults(searchMatchResult);
   };
 
   return (
@@ -127,7 +123,7 @@ function App() {
           onSubmit={submitSearch}
         >
           <label className="sr-only" htmlFor="search">
-            Search
+            Search dogs by breed or sub-breed
           </label>
           <input
             id="searchInput"
@@ -147,12 +143,16 @@ function App() {
       ) : (
         <div className="results flex">
           <ul className="results-list">
-            {results.map((result: RandomDog, i) => (
+            {results.map((result: EnhancedDog, i) => (
               <li className="result-item" key={i}>
                 <div className="flex justify-center items-center result-image">
-                  <img src={result.img} alt={result.label} />
+                  <img src={result.img} alt={result.breed} />
                 </div>
-                <p className="reult-label">{result.label}</p>
+                <p className="reult-label">
+                  {result.isSubBreed
+                    ? `${result.subBreed} ${result.breed}`
+                    : `${result.breed}`}
+                </p>
               </li>
             ))}
           </ul>

@@ -1,10 +1,3 @@
-interface AllDogsResponse {
-  message: {
-    string: [] | string[];
-  };
-  status: string;
-}
-
 export const getAllDogs = async () => {
   const url = "https://dog.ceo/api/breeds/list/all";
 
@@ -26,9 +19,17 @@ interface RandomDogsResponse {
   status: string;
 }
 
-export type RandomDog = {
+export type Dog = {
   img: string;
-  label: string;
+  breed: string;
+  isSubBreed?: boolean;
+};
+
+export type EnhancedDog = {
+  img: string;
+  breed: string;
+  subBreed?: string;
+  isSubBreed?: boolean;
 };
 
 export const getRandomDogs = async (
@@ -71,22 +72,18 @@ export const getDogsByBreed = async (breed: string) => {
   }
 };
 
-// if (matchedResultsArr.length < searchMatchResult.length) {
-//   console.log('if results are <')
-//   searchMatchResult.forEach(breed => {
-//     getDogsByBreed(breed).then(data => {
-//       // Getting image data
-//       const imageData = data.message
-//       // creating an object that has imgData and label
-//       const enhancedBreedObj = {img: imageData, label: breed.toString()}
-//       matchedResultsArr.push(enhancedBreedObj)
-//     })
-//   });
-// } else {
-//   console.log('if results are >')
-//     setmatchedResultsArr(matchedResultsArr)
-//     setResults(matchedResultsArr)
-//     console.log(matchedResultsArr)
-//     setmatchedResultsArr([])
+export const getDogsBySubBreed = async (breed: string, subBreed: string) => {
+  const url = `https://dog.ceo/api/breed/${breed}/${subBreed}/images/random`;
 
-// }
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+  }
+};
