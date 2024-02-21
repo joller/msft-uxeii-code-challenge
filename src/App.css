@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #FFF8F2;
+  background-color: #fff8f2;
 }
 
 .App-logo {
@@ -10,7 +10,7 @@
 }
 
 .logo-name {
-  color: #2F3A4B;
+  color: #2f3a4b;
   font-weight: bold;
 }
 
@@ -68,9 +68,9 @@
   align-items: center;
 }
 
-input[type=text] {
+input[type="text"] {
   width: 100%;
-  border: 1px solid #B1B1B9;
+  border: 1px solid #b1b1b9;
   padding: 0 24px;
   height: 50px;
   border-radius: 10px;
@@ -78,13 +78,13 @@ input[type=text] {
   font-weight: 600;
 }
 
-input[type=text]::placeholder {
-  color: #B1B1B9;
+input[type="text"]::placeholder {
+  color: #b1b1b9;
 }
 
-.search-wrapper {
+.search-form {
   width: 100vw;
-  margin-top: 38px;
+  margin: 40px 0 50px;
 }
 
 .search-input {
@@ -95,7 +95,7 @@ input[type=text]::placeholder {
 .button {
   border: none;
   background: #385955;
-  color: #FFF;
+  color: #fff;
   border-radius: 10px;
   height: 50px;
   padding: 0 45px;
@@ -108,18 +108,41 @@ input[type=text]::placeholder {
   offset: 0 5px;
 }
 
+.results {
+  margin: 0 auto;
+}
+
 .results-list {
-  display: grid;
+  /* display: grid;
   grid-template-columns: repeat(3, 400px [col-start]);
   column-gap: 30px;
-  row-gap: 20px;
+  row-gap: 20px; */
+  padding: 0;
+  margin: 0 auto;
+
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, 300px [col-start]);
+    column-gap: 30px;
+    row-gap: 20px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 400px [col-start]);
+    column-gap: 30px;
+    row-gap: 20px;
+  }
+
+  @media screen and (min-width: 1280px) {
+    grid-template-columns: repeat(3, 400px [col-start]);
+  }
 }
 
 .result-item {
   list-style: none;
   text-transform: capitalize;
-  
-} 
+}
 
 .result-image {
   overflow: hidden;
