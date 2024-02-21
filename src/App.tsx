@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-// import Search from "./Search";
 
 import "./App.css";
 import type { RandomDog } from "./services/getDogs";
 import { getAllDogs, getRandomDogs, getDogsByBreed } from "./services/getDogs";
 import { parseUrlByBreed } from "./utilities/parseUrlByBreed";
+import { findSearchMatch } from "./utilities/findSearchMatch";
+import { flattenObjectArrays } from "./utilities/flattenObjectArray";
 
 function App() {
+  // The results displayed to the user, whether it be initial or from the search
   const [results, setResults] = useState([]);
-  const [searchData, setSearchData] = useState();
-  // const [matchedResultsArr, setmatchedResultsArr] = useState([]);
+
+  // Sets up the search data we key off of
+  const [searchableData, setSearchableData] = useState([]);
+
+  // To have a mechanism that enables the noResults state
+  const [noResults, setNoResults] = useState(false);
 
   //TODO
   // create search data that gives us all dog possibilities
@@ -19,15 +25,6 @@ function App() {
   // TODO have this populate the URL when searchQuery is populated? Could be the "nice to have"
   // Will need to encode the url param
   // const [searchQuery, setSearchQuery] = useState('')
-
-  function findSearchMatch(searchKey: string, obj: any): any | undefined {
-    const matchKey = Object.keys(obj).filter((key) => key.includes(searchKey));
-    if (matchKey) {
-      return matchKey;
-    } else {
-      return undefined;
-    }
-  }
 
   useEffect(() => {
     getRandomDogs(12).then((data) => {
@@ -42,16 +39,32 @@ function App() {
     });
 
     getAllDogs().then((data) => {
-      const dogData = data.message;
+      const dogResult = data.message;
 
-      setSearchData(dogData);
+      const breedData = Object.keys(dogResult);
+      const subBreedData = flattenObjectArrays(dogResult);
+
+      const adjustedSubBreedData = subBreedData.map((item) => {
+        return { label: item, isSubBreed: true };
+      });
+
+      const adjustedBreedData = breedData.map((item) => {
+        return { label: item, isSubBreed: false };
+      });
+
+      const flattenedDogData = adjustedBreedData.concat(adjustedSubBreedData);
+
+      setSearchableData(flattenedDogData);
     });
   }, []);
+
+  console.log(searchableData);
 
   /// TODO search code
   const submitSearch = (e: any) => {
     // Prevents browser from reloading the page
     e.preventDefault();
+    setNoResults(false);
 
     // Setting empty array that takes in image urls during loop and resets each time form is submitted
     const matchedResultsArr = [];
@@ -65,30 +78,37 @@ function App() {
     // Convert to a plain object
     const formJson = Object.fromEntries(formData.entries());
 
-    //
+    // Only have one form entry, search- parsing to a string for later use
     const searchTerm = formJson.search.toString();
 
-    const searchMatchResult = findSearchMatch(searchTerm, searchData);
+    const searchMatchResult = findSearchMatch(searchTerm, searchableData);
 
-    searchMatchResult.map((breed) => {
-      getDogsByBreed(breed).then((data) => {
-        // Getting image data
-        const imageData = data.message;
-        // creating an object that has imgData and label
-        const enhancedBreedObj = { img: imageData, label: breed.toString() };
+    console.log(searchMatchResult);
 
-        // Adding urls to array
-        matchedResultsArr.push(enhancedBreedObj);
+    searchMatchResult.length === 0
+      ? setNoResults(true)
+      : searchMatchResult.map((breed) => {
+          getDogsByBreed(breed).then((data) => {
+            // Getting image data
+            const imageData = data.message;
+            // creating an object that has imgData and label
+            const enhancedBreedObj = {
+              img: imageData,
+              label: breed.toString(),
+            };
 
-        console.log(results);
+            // Adding urls to array
+            matchedResultsArr.push(enhancedBreedObj);
 
-        // if temporary array is great or equal to our search results terms then set results
-        if (matchedResultsArr.length >= searchMatchResult.length) {
-          setResults(matchedResultsArr);
-          console.log(matchedResultsArr);
-        }
-      });
-    });
+            console.log(results);
+
+            // if temporary array is great or equal to our search results terms then set results
+            if (matchedResultsArr.length >= searchMatchResult.length) {
+              setResults(matchedResultsArr);
+              console.log(matchedResultsArr);
+            }
+          });
+        });
   };
 
   return (
@@ -119,18 +139,25 @@ function App() {
           <button className="button">Search</button>
         </form>
       </header>
-      <div className="results flex">
-        <ul className="results-list">
-          {results.map((result: RandomDog, i) => (
-            <li className="result-item" key={i}>
-              <div className="flex justify-center items-center result-image">
-                <img src={result.img} alt={result.label} />
-              </div>
-              <p className="reult-label">{result.label}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {noResults ? (
+        <div>
+          <h2>No results found</h2>
+          <p>Please try another search</p>
+        </div>
+      ) : (
+        <div className="results flex">
+          <ul className="results-list">
+            {results.map((result: RandomDog, i) => (
+              <li className="result-item" key={i}>
+                <div className="flex justify-center items-center result-image">
+                  <img src={result.img} alt={result.label} />
+                </div>
+                <p className="reult-label">{result.label}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

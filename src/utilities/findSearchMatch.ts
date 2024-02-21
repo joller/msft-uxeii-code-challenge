@@ -1,8 +1,11 @@
-export function findSearchMatch(searchKey: string, obj: any): any | undefined {
-    const matchKey = Object.keys(obj).filter(key => key.includes(searchKey));
-    if (matchKey) {
-        return matchKey;
-    } else {
-        return undefined;
-    }
+export function findSearchMatch(
+  searchKey: string,
+  data: string[]
+): string[] | undefined {
+  const matchKey = data.filter((item) => item.includes(searchKey));
+  if (matchKey) {
+    return matchKey;
+  } else {
+    return undefined;
+  }
 }
