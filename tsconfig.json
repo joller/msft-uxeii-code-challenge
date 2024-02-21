@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "dom.iterable"
+    ]
   }
 }
