@@ -69,3 +69,25 @@ export const getDogsByBreed = async (breed: string) => {
     console.error('Failed to fetch data:', error);
   }
 };
+
+
+
+ // if (matchedResultsArr.length < searchMatchResult.length) {
+        //   console.log('if results are <')
+        //   searchMatchResult.forEach(breed => {      
+        //     getDogsByBreed(breed).then(data => {
+        //       // Getting image data
+        //       const imageData = data.message
+        //       // creating an object that has imgData and label
+        //       const enhancedBreedObj = {img: imageData, label: breed.toString()}
+        //       matchedResultsArr.push(enhancedBreedObj)   
+        //     })
+        //   });
+        // } else {
+        //   console.log('if results are >')
+        //     setmatchedResultsArr(matchedResultsArr)
+        //     setResults(matchedResultsArr)
+        //     console.log(matchedResultsArr)
+        //     setmatchedResultsArr([])
+          
+        // }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Search from "./Search";
+// import Search from "./Search";
 
 import "./App.css";
 import type { RandomDog } from "./services/getDogs";
@@ -9,7 +9,7 @@ import { parseUrlByBreed } from "./utilities/parseUrlByBreed";
 function App() {
   const [results, setResults] = useState([]);
   const [searchData, setSearchData] = useState();
-  const [matchedResultsArr, setmatchedResultsArr] = useState([]);
+  // const [matchedResultsArr, setmatchedResultsArr] = useState([]);
 
   //TODO
   // create search data that gives us all dog possibilities
@@ -50,10 +50,11 @@ function App() {
 
   /// TODO search code
   const submitSearch = (e: any) => {
-    setResults([]);
-    setmatchedResultsArr([]);
     // Prevents browser from reloading the page
     e.preventDefault();
+
+    // Setting empty array that takes in image urls during loop and resets each time form is submitted
+    const matchedResultsArr = [];
 
     // Read the form data
     const form = e.target;
@@ -64,11 +65,10 @@ function App() {
     // Convert to a plain object
     const formJson = Object.fromEntries(formData.entries());
 
+    //
     const searchTerm = formJson.search.toString();
 
     const searchMatchResult = findSearchMatch(searchTerm, searchData);
-
-    console.log(searchMatchResult);
 
     searchMatchResult.map((breed) => {
       getDogsByBreed(breed).then((data) => {
@@ -76,10 +76,14 @@ function App() {
         const imageData = data.message;
         // creating an object that has imgData and label
         const enhancedBreedObj = { img: imageData, label: breed.toString() };
+
+        // Adding urls to array
         matchedResultsArr.push(enhancedBreedObj);
 
+        console.log(results);
+
+        // if temporary array is great or equal to our search results terms then set results
         if (matchedResultsArr.length >= searchMatchResult.length) {
-          setmatchedResultsArr(matchedResultsArr);
           setResults(matchedResultsArr);
           console.log(matchedResultsArr);
         }
