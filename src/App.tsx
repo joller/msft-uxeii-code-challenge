@@ -50,6 +50,8 @@ function App() {
 
   /// TODO search code
   const submitSearch = (e: any) => {
+    setResults([])
+    setmatchedResultsArr([])
     // Prevents browser from reloading the page
     e.preventDefault();
 
@@ -66,9 +68,10 @@ function App() {
 
     const searchMatchResult = findSearchMatch(searchTerm, searchData)
 
-    if (matchedResultsArr.length < searchMatchResult.length) {
-
-      searchMatchResult.forEach(breed => {      
+    
+      console.log(searchMatchResult)
+      
+      searchMatchResult.map(breed => {      
         getDogsByBreed(breed).then(data => {
           // Getting image data
           const imageData = data.message
@@ -76,15 +79,15 @@ function App() {
           const enhancedBreedObj = {img: imageData, label: breed.toString()}
           matchedResultsArr.push(enhancedBreedObj)
           
-          
+          if (matchedResultsArr.length >= searchMatchResult.length) {
+            setmatchedResultsArr(matchedResultsArr)
+            setResults(matchedResultsArr)
+             console.log(matchedResultsArr)
+          }
         })
+      
       });
-    } else {
-      setmatchedResultsArr(matchedResultsArr)
-      setResults(matchedResultsArr)
-      console.log(matchedResultsArr)
 
-    }
 
   }
 
