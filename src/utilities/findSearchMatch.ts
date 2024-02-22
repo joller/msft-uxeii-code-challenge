@@ -4,7 +4,6 @@ export function findSearchMatch(
   searchKey: string,
   data: EnhancedDog[]
 ): EnhancedDog[] | undefined {
-  //TODO consider making this more robust...
   const matchedData = data.filter(
     (item) =>
       item.breed === searchKey ||

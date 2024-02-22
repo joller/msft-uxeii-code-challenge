@@ -8,6 +8,8 @@
   height: 60px;
   pointer-events: none;
   margin-right: 20px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 }
 
 .logo-name {
@@ -114,10 +116,6 @@ input[type="text"]::placeholder {
 }
 
 .results-list {
-  /* display: grid;
-  grid-template-columns: repeat(3, 400px [col-start]);
-  column-gap: 30px;
-  row-gap: 20px; */
   padding: 0;
   margin: 0 auto;
 
