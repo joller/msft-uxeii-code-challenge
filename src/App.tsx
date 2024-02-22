@@ -44,7 +44,17 @@ function App() {
     });
 
     // Takes dog response from allDogs API and processes to an "enhanced" array that differentiates between breed/subBreed
+  }, []);
+
+  //console.log(searchableData);
+
+  /// TODO handle an empty input submission?
+  const submitSearch = (e: any) => {
+    e.preventDefault();
+    setNoResults(false);
+
     getAllDogs().then((data) => {
+      setSearchableData([]);
       const dogResult = data.message;
 
       const processedDogData: EnhancedDog[] = processBreedData(dogResult);
@@ -65,7 +75,8 @@ function App() {
             enhancedDogsArr.push(enhancedBreedObj);
           });
           // ... otherwise just ping breed
-        } else {
+        }
+        if (dog.isSubBreed === false) {
           getDogImagesByBreed(breed).then((data) => {
             const imageData = data.message;
 
@@ -82,15 +93,8 @@ function App() {
       // Populate the searchable data set
       setSearchableData(enhancedDogsArr);
     });
-  }, []);
 
-  //console.log(searchableData);
-
-  /// TODO handle an empty input submission?
-  const submitSearch = (e: any) => {
     // Prevents browser from reloading the page
-    e.preventDefault();
-    setNoResults(false);
 
     // Read the form data
     const form = e.target;
@@ -106,11 +110,13 @@ function App() {
 
     const searchMatchResult = findSearchMatch(searchTerm, searchableData);
 
-    // console.log(searchMatchResult);
+    console.log("search matched results", searchMatchResult);
 
     searchMatchResult.length === 0
       ? setNoResults(true)
       : setResults(searchMatchResult);
+
+    console.log("her", searchMatchResult);
   };
 
   return (

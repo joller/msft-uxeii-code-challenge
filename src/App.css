@@ -150,12 +150,14 @@ input[type="text"]::placeholder {
   aspect-ratio: 16/9;
   border-radius: 20px;
 }
+
 .result-image img {
   max-width: 400px;
   flex-shrink: 0;
   min-width: 100%;
   min-height: 100%;
 }
+
 .reult-label {
   width: 100%;
   text-align: left;

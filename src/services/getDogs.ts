@@ -9,12 +9,6 @@ interface DogsImageResponse {
   status: string;
 }
 
-export type Dog = {
-  img: string;
-  breed: string;
-  isSubBreed?: boolean;
-};
-
 export type EnhancedDog = {
   img: string;
   breed: string;
