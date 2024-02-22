@@ -6,7 +6,10 @@ export function findSearchMatch(
 ): EnhancedDog[] | undefined {
   //TODO consider making this more robust...
   const matchedData = data.filter(
-    (item) => item.breed === searchKey || item.subBreed === searchKey
+    (item) =>
+      item.breed === searchKey ||
+      item.subBreed === searchKey ||
+      searchKey.includes(`${item.subBreed} ${item.breed}`)
   );
 
   if (matchedData) {

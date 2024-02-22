@@ -57,24 +57,20 @@ function App() {
         if (dog.isSubBreed === true) {
           getDogImagesBySubBreed(breed, subBreed).then((data) => {
             const imageData = data.message;
-
             const enhancedBreedObj = {
               ...dog,
               img: imageData,
             };
-
             enhancedDogsArr.push(enhancedBreedObj);
           });
           // ... otherwise just ping breed
         } else {
           getDogImagesByBreed(breed).then((data) => {
             const imageData = data.message;
-
             const enhancedBreedObj = {
               ...dog,
               img: imageData,
             };
-
             enhancedDogsArr.push(enhancedBreedObj);
           });
         }
@@ -106,8 +102,7 @@ function App() {
     const searchTerm = formJson.search.toString();
 
     const searchMatchResult = findSearchMatch(searchTerm, searchableData);
-
-    // console.log(searchMatchResult);
+    console.log(searchTerm, searchMatchResult);
 
     searchMatchResult.length === 0
       ? setNoResults(true)
