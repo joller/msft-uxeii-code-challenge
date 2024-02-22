@@ -158,7 +158,7 @@ function App() {
             {results.map((result: EnhancedDog, i) => (
               <li className="result-item" key={i}>
                 <button onClick={() => handleModal(result)}>
-                  <span className="sr-only">{`Expan ${result.breed} Image`}</span>
+                  <span className="sr-only">{`Expand ${result.breed} Image`}</span>
                   <div className="flex justify-center items-center result-image">
                     <img src={result.img} alt={result.breed} />
                   </div>
