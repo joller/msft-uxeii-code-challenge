@@ -152,7 +152,9 @@ function App() {
       {noResults ? (
         <div>
           <h2>No results found</h2>
-          <p>Please try another search</p>
+          <p>
+            Please try a <a href="/">new search</a>
+          </p>
         </div>
       ) : (
         <div className="results flex">
