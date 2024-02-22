@@ -82,13 +82,10 @@ function App() {
           });
         }
       });
-      console.log(enhancedDogsArr);
       // Populate the searchable data set
       setSearchableData(enhancedDogsArr);
     });
   }, []);
-
-  //console.log(searchableData);
 
   /// TODO handle an empty input submission?
   const submitSearch = (e: any) => {
@@ -109,7 +106,6 @@ function App() {
     const searchTerm = formJson.search.toString();
 
     const searchMatchResult = findSearchMatch(searchTerm, searchableData);
-    console.log(searchTerm, searchMatchResult);
 
     searchMatchResult.length === 0
       ? setNoResults(true)
@@ -162,6 +158,7 @@ function App() {
             {results.map((result: EnhancedDog, i) => (
               <li className="result-item" key={i}>
                 <button onClick={() => handleModal(result)}>
+                  <span className="sr-only">View Image</span>
                   <div className="flex justify-center items-center result-image">
                     <img src={result.img} alt={result.breed} />
                   </div>
