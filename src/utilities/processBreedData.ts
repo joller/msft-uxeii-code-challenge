@@ -1,6 +1,5 @@
 import { EnhancedDog } from "../services/getDogs";
 
-// TODO sanitize data/remove repeats
 export function processBreedData(obj: {
   [key: string]: string[] | [];
 }): EnhancedDog[] {

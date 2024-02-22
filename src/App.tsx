@@ -18,6 +18,9 @@ import { parseUrlByBreed } from "./utilities/parseUrlByBreed";
 import { findSearchMatch } from "./utilities/findSearchMatch";
 import { processBreedData } from "./utilities/processBreedData";
 
+/* Component */
+import { DogModal } from "./DogModal";
+
 function App() {
   // The results displayed to the user, whether it be initial or from the search
   const [results, setResults] = useState([]);
@@ -27,6 +30,10 @@ function App() {
 
   // To have a mechanism that enables the noResults state
   const [noResults, setNoResults] = useState(false);
+
+  const [modal, setModal] = useState(false);
+
+  const [modalImage, setModalImage] = useState();
 
   // Setting empty array that adds in image urls
 
@@ -109,6 +116,11 @@ function App() {
       : setResults(searchMatchResult);
   };
 
+  const handleModal = (result) => {
+    setModal(true);
+    setModalImage(result);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -147,19 +159,24 @@ function App() {
           <ul className="results-list">
             {results.map((result: EnhancedDog, i) => (
               <li className="result-item" key={i}>
-                <div className="flex justify-center items-center result-image">
-                  <img src={result.img} alt={result.breed} />
-                </div>
-                <p className="reult-label">
-                  {result.isSubBreed
-                    ? `${result.subBreed} ${result.breed}`
-                    : `${result.breed}`}
-                </p>
+                <button onClick={() => handleModal(result)}>
+                  <div className="flex justify-center items-center result-image">
+                    <img src={result.img} alt={result.breed} />
+                  </div>
+                  <p className="reult-label">
+                    {result.isSubBreed
+                      ? `${result.subBreed} ${result.breed}`
+                      : `${result.breed}`}
+                  </p>
+                </button>
               </li>
             ))}
           </ul>
         </div>
       )}
+      {modal ? (
+        <DogModal info={modalImage} handleClose={() => setModal(false)} />
+      ) : null}
     </div>
   );
 }
